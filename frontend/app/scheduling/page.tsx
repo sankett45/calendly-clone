@@ -14,14 +14,14 @@ const MOCK_EVENTS: EventType[] = [
     title: "30 Minute Meeting",
     slug: "30-min",
     description: "A short call to connect and discuss.",
-    duration: 30,
+    duration_minutes: 30,
   },
   {
     id: "2",
     title: "60 Minute Meeting",
     slug: "60-min",
     description: "An in-depth session.",
-    duration: 60,
+    duration_minutes: 60,
   },
 ];
 

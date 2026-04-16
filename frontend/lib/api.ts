@@ -41,12 +41,26 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 // ── Types ─────────────────────────────────────────────
 
+export interface QuestionDefinition {
+  key: string;
+  label: string;
+  type: "text" | "textarea" | "phone" | "url";
+  required: boolean;
+  placeholder?: string;
+}
+
 export interface EventType {
   id: string;
   title: string;
   slug: string;
   description?: string;
-  duration_minutes: number; // ✅ FIXED BACK
+  duration_minutes: number;
+  custom_questions?: QuestionDefinition[];
+  color?: string;
+  location_type?: string;
+  buffer_before?: number;
+  buffer_after?: number;
+  is_active?: boolean;
 }
 
 export interface Slot {
@@ -59,12 +73,15 @@ export interface Slot {
 export interface Booking {
   id: string;
   event_type_id: string;
+  host_id?: string;
   invitee_email: string;
   invitee_name: string;
   invitee_timezone: string;
   start_utc: string;
   end_utc: string;
   status: string;
+  meeting_url?: string;
+  notes?: string;
   created_at: string;
 }
 
@@ -111,6 +128,8 @@ export const api = {
     invitee_email: string;
     invitee_name: string;
     invitee_timezone: string;
+    notes?: string;
+    answers?: { key: string; value: string }[];
   }) =>
     apiFetch<Booking>("/bookings", {
       method: "POST",
@@ -120,9 +139,17 @@ export const api = {
   getBooking: (bookingId: string) =>
     apiFetch<Booking>(`/bookings/${bookingId}/public`),
 
-  // ✅ FIXED — ADD THIS BACK
   getUpcoming: () =>
     apiFetch<Booking[]>("/bookings/upcoming"),
+
+  rescheduleBooking: (bookingId: string, payload: {
+    slot_start_utc: string;
+    invitee_timezone: string;
+  }) =>
+    apiFetch<Booking>(`/bookings/${bookingId}/reschedule`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    }),
 };
 
 // ── Helpers ───────────────────────────────────────────
