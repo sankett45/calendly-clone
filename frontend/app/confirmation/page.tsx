@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import dayjs from "dayjs";
 import { fmtDate } from "@/lib/api";
 
-export default function ConfirmationPage() {
+function ConfirmationContent() {
   const params     = useSearchParams();
   const bookingId  = params.get("id")    ?? "";
   const name       = params.get("name")  ?? "there";
@@ -83,6 +84,14 @@ export default function ConfirmationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">Loading...</div>}>
+      <ConfirmationContent />
+    </Suspense>
   );
 }
 
