@@ -93,8 +93,7 @@ const booking = await api.createBooking({
   invitee_email: email,
   invitee_name: name,
   invitee_timezone: userTz,
-  notes,
-  answers,
+
 });
 
 router.push(
